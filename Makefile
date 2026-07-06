@@ -27,8 +27,10 @@ DOCKER_BUILD_CACHE_PATH ?= /tmp/.buildx-cache/$(REPO_NAME)
 # of truth, managed by dependency updates). Override on the command line for
 # ad-hoc builds, e.g. CFN_LINT_VERSION=1.20.0 make docker/build.
 dockerfile-arg = $(shell grep -E '^ARG $(1)=' Dockerfile | head -1 | cut -d= -f2)
-AWSCLI_VERSION   ?= $(call dockerfile-arg,AWSCLI_VERSION)
-CFN_LINT_VERSION ?= $(call dockerfile-arg,CFN_LINT_VERSION)
+AWSCLI_VERSION    ?= $(call dockerfile-arg,AWSCLI_VERSION)
+CFN_LINT_VERSION  ?= $(call dockerfile-arg,CFN_LINT_VERSION)
+RAIN_VERSION      ?= $(call dockerfile-arg,RAIN_VERSION)
+CFN_GUARD_VERSION ?= $(call dockerfile-arg,CFN_GUARD_VERSION)
 
 # The image version tracks cfn-lint (the CloudFormation-specific tool).
 VERSION := $(CFN_LINT_VERSION)
@@ -57,6 +59,8 @@ DOCKER_MULTI_PLATFORM := $(shell echo "$(DOCKER_PLATFORMS)" | grep -q ',' && ech
 DOCKER_BUILD_ARGS ?=
 DOCKER_BUILD_ARGS += --build-arg AWSCLI_VERSION=$(AWSCLI_VERSION)
 DOCKER_BUILD_ARGS += --build-arg CFN_LINT_VERSION=$(CFN_LINT_VERSION)
+DOCKER_BUILD_ARGS += --build-arg RAIN_VERSION=$(RAIN_VERSION)
+DOCKER_BUILD_ARGS += --build-arg CFN_GUARD_VERSION=$(CFN_GUARD_VERSION)
 DOCKER_BUILD_ARGS += --platform=$(DOCKER_PLATFORMS)
 # Only import cache if it exists and has content
 ifneq ($(wildcard $(DOCKER_BUILD_CACHE_PATH)/index.json),)

@@ -38,10 +38,14 @@ in CI (e.g. the `aws-account-bootstrap` seed repo).
 | ---- | ------- |
 | [AWS CLI v2](https://docs.aws.amazon.com/cli/) | Deploy stacks/StackSets, `validate-template` |
 | [cfn-lint](https://github.com/aws-cloudformation/cfn-lint) | Lint CloudFormation templates |
+| [rain][rain] | CloudFormation CLI + formatter (`rain fmt`, `rain deploy`) |
+| [cfn-guard][cfn-guard] | Policy-as-code validation (`cfn-guard validate`) |
 | `git`, `jq`, `bash`, `vim` | Everyday tooling for scripts and CI |
 
 The AWS CLI is PGP-verified against the AWS CLI Team key at build time; the
-image version tracks the pinned `cfn-lint` release.
+image version tracks the pinned `cfn-lint` release. `cfn-guard` is arch-guarded —
+bundled on `amd64`/`arm64` and skipped on architectures without a published
+binary so multi-arch builds stay green.
 
 ## Tags
 
@@ -85,8 +89,7 @@ Run `make help` for all targets.
 ## Extending
 
 Additional CloudFormation tooling can be layered in the `Dockerfile` following
-the same pinned-ARG + Renovate pattern — e.g. [`rain`][rain] (CLI/formatter),
-[`cfn-guard`][cfn-guard] (policy-as-code), or [`cfn-nag`][cfn-nag] (security
+the same pinned-ARG + Renovate pattern — e.g. [`cfn-nag`][cfn-nag] (security
 linting).
 
 ## License

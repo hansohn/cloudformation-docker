@@ -32,6 +32,10 @@ case "${TOOL}" in
     VERSION=$(${CURL} "https://api.github.com/repos/aws/aws-cli/tags?per_page=100" | jq -r '.[].name' | grep -E '^2\.' | sort -V | tail -1) ;;
   cfn-lint)
     VERSION=$(${CURL} "https://pypi.org/pypi/cfn-lint/json" | jq -r .info.version) ;;
+  rain)
+    VERSION=$(${CURL} "https://api.github.com/repos/aws-cloudformation/rain/releases/latest" | jq -r .tag_name) ;;
+  cfn-guard)
+    VERSION=$(${CURL} "https://api.github.com/repos/aws-cloudformation/cloudformation-guard/releases/latest" | jq -r .tag_name) ;;
   *)
     echo "resolve-version.sh: unknown tool '${TOOL}'" >&2
     exit 1 ;;
