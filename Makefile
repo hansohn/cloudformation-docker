@@ -32,8 +32,9 @@ CFN_LINT_VERSION  ?= $(call dockerfile-arg,CFN_LINT_VERSION)
 RAIN_VERSION      ?= $(call dockerfile-arg,RAIN_VERSION)
 CFN_GUARD_VERSION ?= $(call dockerfile-arg,CFN_GUARD_VERSION)
 
-# The image version tracks cfn-lint (the CloudFormation-specific tool).
-VERSION := $(CFN_LINT_VERSION)
+# The image version tracks the AWS CLI — the one required tool and the actual
+# CloudFormation client. Other bundled tools are pinned independently.
+VERSION := $(AWSCLI_VERSION)
 VERSION_PARTS = $(subst ., ,$(VERSION))
 VERSION_MAJOR = $(word 1,$(VERSION_PARTS))
 VERSION_MINOR = $(word 1,$(VERSION_PARTS)).$(word 2,$(VERSION_PARTS))

@@ -54,7 +54,7 @@ jobs:
       - name: Prepare metadata
         id: prep
         run: |
-          version=$(grep -E '^ARG CFN_LINT_VERSION=' Dockerfile | head -1 | cut -d= -f2)
+          version=$(grep -E '^ARG AWSCLI_VERSION=' Dockerfile | head -1 | cut -d= -f2)
           {
             echo "version=${version}"
             echo "minor=${version%.*}"
@@ -117,7 +117,7 @@ jobs:
       - name: Prepare metadata
         id: prep
         run: |
-          version=$(grep -E '^ARG CFN_LINT_VERSION=' Dockerfile | head -1 | cut -d= -f2)
+          version=$(grep -E '^ARG AWSCLI_VERSION=' Dockerfile | head -1 | cut -d= -f2)
           {
             echo "version=${version}"
             echo "minor=${version%.*}"
@@ -206,7 +206,7 @@ jobs:
       - name: Prepare metadata
         id: prep
         run: |
-          version=$(grep -E '^ARG CFN_LINT_VERSION=' Dockerfile | head -1 | cut -d= -f2)
+          version=$(grep -E '^ARG AWSCLI_VERSION=' Dockerfile | head -1 | cut -d= -f2)
           {
             echo "version=${version}"
             echo "minor=${version%.*}"
