@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "description": "Renovate manages GitHub Actions, the Debian base image, and the pinned CloudFormation tooling versions declared as ARGs in the Dockerfile.",
+  "enabledManagers": [
+    "github-actions",
+    "dockerfile",
+    "custom.regex"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Bump pinned tool versions declared as ARGs in the Dockerfile",
+      "managerFilePatterns": [
+        "/(^|/)Dockerfile$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: extractVersion=(?<extractVersion>\\S+))?\\s+ARG \\w+_VERSION=(?<currentValue>\\S+)"
+      ],
+      "versioningTemplate": "semver"
+    }
+  ]
+}
