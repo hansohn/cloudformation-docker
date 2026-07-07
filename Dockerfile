@@ -6,7 +6,7 @@ FROM debian:${DEBIAN_VERSION} AS builder
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH
 # renovate: datasource=github-tags depName=aws/aws-cli
-ARG AWSCLI_VERSION=2.35.15
+ARG AWSCLI_VERSION=2.35.16
 # renovate: datasource=github-releases depName=aws-cloudformation/rain
 ARG RAIN_VERSION=v1.24.4
 # renovate: datasource=github-releases depName=aws-cloudformation/cloudformation-guard
