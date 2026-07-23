@@ -92,7 +92,7 @@ RUN --mount=type=cache,target=/var/cache/github-api \
 FROM debian:${DEBIAN_VERSION} AS main
 ARG DEBIAN_FRONTEND=noninteractive
 # renovate: datasource=pypi depName=cfn-lint
-ARG CFN_LINT_VERSION=1.53.1
+ARG CFN_LINT_VERSION=1.53.2
 # awscli renders help output through groff/less; python3 hosts cfn-lint.
 RUN apt-get update && apt-get install --no-install-recommends -y \
       bash \
