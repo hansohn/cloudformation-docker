@@ -10,7 +10,7 @@ ARG AWSCLI_VERSION=2.36.29
 # renovate: datasource=github-releases depName=aws-cloudformation/rain
 ARG RAIN_VERSION=v1.24.4
 # renovate: datasource=github-releases depName=aws-cloudformation/cloudformation-guard
-ARG CFN_GUARD_VERSION=3.2.0
+ARG CFN_GUARD_VERSION=3.2.1
 # AWS CLI installer packages are PGP-signed by the AWS CLI Team key. Trust is
 # pinned to this fingerprint; the current public key (with up-to-date expiry) is
 # fetched from a keyserver at build time so extensions don't require a rebuild.
