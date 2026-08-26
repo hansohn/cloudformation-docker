@@ -91,7 +91,12 @@ jobs:
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ github.ref_name }}
+          # Read this branch's own cache, falling back to main's so a fresh
+          # branch starts warm. Only ever write to this branch's own scope,
+          # so feature branches cannot pollute main's cache.
+          cache-from: |
+            type=gha,scope=${{ github.ref_name }}
+            type=gha,scope=main
           cache-to: type=gha,mode=max,scope=${{ github.ref_name }}
           provenance: true
           sbom: true
@@ -170,8 +175,12 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=publish
-          cache-to: type=gha,mode=max,scope=publish
+          # Shares main's scope with the verification build, so the weekly
+          # rebuild of main reuses layers already built when main was pushed.
+          # 'main' is hardcoded rather than derived: it is the default branch
+          # in every repo using this workflow.
+          cache-from: type=gha,scope=main
+          cache-to: type=gha,mode=max,scope=main
           provenance: true
           sbom: true
 
