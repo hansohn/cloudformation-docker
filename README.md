@@ -97,8 +97,8 @@ This image is one of a family of infrastructure-tooling images built from
 the same Makefile, workflow and Renovate pattern. The cloud-specific
 Terraform images all layer on top of `hansohn/terraform`.
 
-|  | Repo | Image | Contents |
-| :-: | ---- | ----- | -------- |
+| Provider | Repo | Image | Contents |
+| :------: | ---- | ----- | -------- |
 | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" alt="Terraform" width="20" height="20"> | [terraform-docker](https://github.com/hansohn/terraform-docker) | [`hansohn/terraform`](https://hub.docker.com/r/hansohn/terraform) | terraform, terragrunt, terraform-docs, tflint, trivy |
 | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" width="20" height="20"> | [terraform-aws-docker](https://github.com/hansohn/terraform-aws-docker) | [`hansohn/terraform-aws`](https://hub.docker.com/r/hansohn/terraform-aws) | terraform base + aws-cli, tflint-ruleset-aws |
 | <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure" width="20" height="20"> | [terraform-azure-docker](https://github.com/hansohn/terraform-azure-docker) | [`hansohn/terraform-azure`](https://hub.docker.com/r/hansohn/terraform-azure) | terraform base + azure-cli, tflint-ruleset-azurerm |
