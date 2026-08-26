@@ -98,12 +98,54 @@ the same Makefile, workflow and Renovate pattern. `terraform-docker` and
 `cloudformation-docker` each build directly from Debian; the four
 cloud-specific Terraform images layer on top of `hansohn/terraform`.
 
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" alt="Terraform" width="20" height="20"> [terraform-docker](https://github.com/hansohn/terraform-docker) — [`hansohn/terraform`](https://hub.docker.com/r/hansohn/terraform)
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" width="20" height="20"> [terraform-aws-docker](https://github.com/hansohn/terraform-aws-docker) — [`hansohn/terraform-aws`](https://hub.docker.com/r/hansohn/terraform-aws)
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure" width="20" height="20"> [terraform-azure-docker](https://github.com/hansohn/terraform-azure-docker) — [`hansohn/terraform-azure`](https://hub.docker.com/r/hansohn/terraform-azure)
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/digitalocean/digitalocean-original.svg" alt="DigitalOcean" width="20" height="20"> [terraform-digitalocean-docker](https://github.com/hansohn/terraform-digitalocean-docker) — [`hansohn/terraform-digitalocean`](https://hub.docker.com/r/hansohn/terraform-digitalocean)
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt="Google Cloud" width="20" height="20"> [terraform-google-docker](https://github.com/hansohn/terraform-google-docker) — [`hansohn/terraform-google`](https://hub.docker.com/r/hansohn/terraform-google)
-- <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" width="20" height="20"> [cloudformation-docker](https://github.com/hansohn/cloudformation-docker) — [`hansohn/cloudformation`](https://hub.docker.com/r/hansohn/cloudformation)
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://github.com/hansohn/terraform-docker">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" width="48" height="48" alt="Terraform"><br>
+        <sub><b>terraform-docker</b></sub>
+      </a><br>
+      <a href="https://hub.docker.com/r/hansohn/terraform"><sub><code>hansohn/terraform</code></sub></a>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://github.com/hansohn/terraform-aws-docker">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" width="48" height="48" alt="AWS"><br>
+        <sub><b>terraform-aws-docker</b></sub>
+      </a><br>
+      <a href="https://hub.docker.com/r/hansohn/terraform-aws"><sub><code>hansohn/terraform-aws</code></sub></a>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://github.com/hansohn/terraform-azure-docker">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" width="48" height="48" alt="Azure"><br>
+        <sub><b>terraform-azure-docker</b></sub>
+      </a><br>
+      <a href="https://hub.docker.com/r/hansohn/terraform-azure"><sub><code>hansohn/terraform-azure</code></sub></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://github.com/hansohn/terraform-digitalocean-docker">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/digitalocean/digitalocean-original.svg" width="48" height="48" alt="DigitalOcean"><br>
+        <sub><b>terraform-digitalocean-docker</b></sub>
+      </a><br>
+      <a href="https://hub.docker.com/r/hansohn/terraform-digitalocean"><sub><code>hansohn/terraform-digitalocean</code></sub></a>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://github.com/hansohn/terraform-google-docker">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" width="48" height="48" alt="Google Cloud"><br>
+        <sub><b>terraform-google-docker</b></sub>
+      </a><br>
+      <a href="https://hub.docker.com/r/hansohn/terraform-google"><sub><code>hansohn/terraform-google</code></sub></a>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://github.com/hansohn/cloudformation-docker">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" width="48" height="48" alt="AWS"><br>
+        <sub><b>cloudformation-docker</b></sub>
+      </a><br>
+      <a href="https://hub.docker.com/r/hansohn/cloudformation"><sub><code>hansohn/cloudformation</code></sub></a>
+    </td>
+  </tr>
+</table>
 
 ## License
 
