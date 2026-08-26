@@ -6,6 +6,8 @@ on:
   push:
     branches:
       - '**'
+  # Weekly refresh at 07:17 UTC. This image builds straight from debian and
+  # nothing layers on it, so it shares the early slot with hansohn/terraform.
   schedule:
     - cron: '17 7 * * 1'
   workflow_dispatch:
