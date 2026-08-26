@@ -91,6 +91,21 @@ Additional CloudFormation tooling can be layered in the `Dockerfile` following
 the same pinned-ARG + Renovate pattern — e.g. [`cfn-nag`][cfn-nag] (security
 linting).
 
+## Related Images
+
+This image is one of a family of infrastructure-tooling images built from
+the same Makefile, workflow and Renovate pattern. The cloud-specific
+Terraform images all layer on top of `hansohn/terraform`.
+
+| Repo | Image | Contents |
+| ---- | ----- | -------- |
+| [terraform-docker](https://github.com/hansohn/terraform-docker) | [`hansohn/terraform`](https://hub.docker.com/r/hansohn/terraform) | Base Terraform toolchain — terraform, terragrunt, tflint, terraform-docs, trivy |
+| [terraform-aws-docker](https://github.com/hansohn/terraform-aws-docker) | [`hansohn/terraform-aws`](https://hub.docker.com/r/hansohn/terraform-aws) | Base image plus the AWS CLI and the TFLint AWS ruleset |
+| [terraform-azure-docker](https://github.com/hansohn/terraform-azure-docker) | [`hansohn/terraform-azure`](https://hub.docker.com/r/hansohn/terraform-azure) | Base image plus the Azure CLI and the TFLint AzureRM ruleset |
+| [terraform-digitalocean-docker](https://github.com/hansohn/terraform-digitalocean-docker) | [`hansohn/terraform-digitalocean`](https://hub.docker.com/r/hansohn/terraform-digitalocean) | Base image plus doctl, the DigitalOcean CLI |
+| [terraform-google-docker](https://github.com/hansohn/terraform-google-docker) | [`hansohn/terraform-google`](https://hub.docker.com/r/hansohn/terraform-google) | Base image plus the Google Cloud CLI and the TFLint Google ruleset |
+| **cloudformation-docker** (this repo) | [`hansohn/cloudformation`](https://hub.docker.com/r/hansohn/cloudformation) | CloudFormation tooling — aws-cli, cfn-lint, rain, cfn-guard |
+
 ## License
 
 Apache 2.0 — see [LICENSE](LICENSE).
