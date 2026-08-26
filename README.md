@@ -1,27 +1,17 @@
 <div align="center">
-  <h3>cloudformation-docker</h3>
+  <h1>cloudformation-docker</h1>
   <p>CloudFormation tooling Docker image</p>
   <p>
     <!-- Build Status -->
-    <a href="https://actions-badge.atrox.dev/hansohn/cloudformation-docker/goto?ref=main">
-      <img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhansohn%2Fcloudformation-docker%2Fbadge%3Fref%3Dmain&style=for-the-badge">
-    </a>
+    <a href="https://actions-badge.atrox.dev/hansohn/cloudformation-docker/goto?ref=main"><img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhansohn%2Fcloudformation-docker%2Fbadge%3Fref%3Dmain&style=for-the-badge"></a>
     <!-- Github Tag -->
-    <a href="https://gitHub.com/hansohn/cloudformation-docker/tags/">
-      <img src="https://img.shields.io/github/tag/hansohn/cloudformation-docker.svg?style=for-the-badge">
-    </a>
+    <a href="https://gitHub.com/hansohn/cloudformation-docker/tags/"><img src="https://img.shields.io/github/tag/hansohn/cloudformation-docker.svg?style=for-the-badge"></a>
     <!-- Docker Pulls -->
-    <a href="https://hub.docker.com/r/hansohn/cloudformation">
-      <img src="https://img.shields.io/docker/pulls/hansohn/cloudformation.svg?style=for-the-badge">
-    </a>
+    <a href="https://hub.docker.com/r/hansohn/cloudformation"><img src="https://img.shields.io/docker/pulls/hansohn/cloudformation.svg?style=for-the-badge"></a>
     <!-- Docker Image Size -->
-    <a href="https://hub.docker.com/r/hansohn/cloudformation">
-      <img src="https://img.shields.io/docker/image-size/hansohn/cloudformation/latest.svg?style=for-the-badge">
-    </a>
+    <a href="https://hub.docker.com/r/hansohn/cloudformation"><img src="https://img.shields.io/docker/image-size/hansohn/cloudformation/latest.svg?style=for-the-badge"></a>
     <!-- License -->
-    <a href="https://github.com/hansohn/cloudformation-docker/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/hansohn/cloudformation-docker.svg?style=for-the-badge">
-    </a>
+    <a href="https://github.com/hansohn/cloudformation-docker/blob/main/LICENSE"><img src="https://img.shields.io/github/license/hansohn/cloudformation-docker.svg?style=for-the-badge"></a>
   </p>
 </div>
 
@@ -43,18 +33,27 @@ in CI (e.g. the `aws-account-bootstrap` seed repo).
 | `git`, `jq`, `bash`, `vim` | Everyday tooling for scripts and CI |
 
 The AWS CLI is PGP-verified against the AWS CLI Team key at build time; the
-image version tracks the pinned `cfn-lint` release. `cfn-guard` is arch-guarded —
+image version tracks the pinned AWS CLI release. `cfn-guard` is arch-guarded —
 bundled on `amd64`/`arm64` and skipped on architectures without a published
 binary so multi-arch builds stay green.
 
 ## Tags
 
+Image tags follow the pinned `AWSCLI_VERSION` in the `Dockerfile`. The other
+bundled tools (`cfn-lint`, `rain`, `cfn-guard`) are pinned independently, so a
+bump to one of those does not move the version — it republishes the existing
+tags with the newer tool inside.
+
 ```
+# tag formats (for a pinned AWS CLI version of e.g. 2.36.31)
 hansohn/cloudformation:latest    the currently published release
-hansohn/cloudformation:1         the 1.x.x line
-hansohn/cloudformation:1.22      the 1.22.x line
-hansohn/cloudformation:1.22.0    the exact version
+hansohn/cloudformation:2         the 2.x.x line
+hansohn/cloudformation:2.36      the 2.36.x line
+hansohn/cloudformation:2.36.31   the exact version
 ```
+
+For reproducibility, pin by digest (`hansohn/cloudformation@sha256:...`); every
+image ships provenance attestations and an SBOM bound to that digest.
 
 ## Usage
 
@@ -91,6 +90,22 @@ Run `make help` for all targets.
 Additional CloudFormation tooling can be layered in the `Dockerfile` following
 the same pinned-ARG + Renovate pattern — e.g. [`cfn-nag`][cfn-nag] (security
 linting).
+
+## Related Images
+
+This image is one of a family of infrastructure-tooling images built from
+the same Makefile, workflow and Renovate pattern. `terraform-docker` and
+`cloudformation-docker` each build directly from Debian; the four
+cloud-specific Terraform images layer on top of `hansohn/terraform`.
+
+| Provider | Repo | Image |
+| :------: | ---- | ----- |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg" alt="Terraform" width="20" height="20"> | [terraform-docker](https://github.com/hansohn/terraform-docker) | [`hansohn/terraform`](https://hub.docker.com/r/hansohn/terraform) |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" width="20" height="20"> | [terraform-aws-docker](https://github.com/hansohn/terraform-aws-docker) | [`hansohn/terraform-aws`](https://hub.docker.com/r/hansohn/terraform-aws) |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg" alt="Azure" width="20" height="20"> | [terraform-azure-docker](https://github.com/hansohn/terraform-azure-docker) | [`hansohn/terraform-azure`](https://hub.docker.com/r/hansohn/terraform-azure) |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/digitalocean/digitalocean-original.svg" alt="DigitalOcean" width="20" height="20"> | [terraform-digitalocean-docker](https://github.com/hansohn/terraform-digitalocean-docker) | [`hansohn/terraform-digitalocean`](https://hub.docker.com/r/hansohn/terraform-digitalocean) |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg" alt="Google Cloud" width="20" height="20"> | [terraform-google-docker](https://github.com/hansohn/terraform-google-docker) | [`hansohn/terraform-google`](https://hub.docker.com/r/hansohn/terraform-google) |
+| <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg" alt="AWS" width="20" height="20"> | [cloudformation-docker](https://github.com/hansohn/cloudformation-docker) | [`hansohn/cloudformation`](https://hub.docker.com/r/hansohn/cloudformation) |
 
 ## License
 
