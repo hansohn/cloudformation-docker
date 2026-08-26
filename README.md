@@ -33,18 +33,27 @@ in CI (e.g. the `aws-account-bootstrap` seed repo).
 | `git`, `jq`, `bash`, `vim` | Everyday tooling for scripts and CI |
 
 The AWS CLI is PGP-verified against the AWS CLI Team key at build time; the
-image version tracks the pinned `cfn-lint` release. `cfn-guard` is arch-guarded —
+image version tracks the pinned AWS CLI release. `cfn-guard` is arch-guarded —
 bundled on `amd64`/`arm64` and skipped on architectures without a published
 binary so multi-arch builds stay green.
 
 ## Tags
 
+Image tags follow the pinned `AWSCLI_VERSION` in the `Dockerfile`. The other
+bundled tools (`cfn-lint`, `rain`, `cfn-guard`) are pinned independently, so a
+bump to one of those does not move the version — it republishes the existing
+tags with the newer tool inside.
+
 ```
+# tag formats (for a pinned AWS CLI version of e.g. 2.36.31)
 hansohn/cloudformation:latest    the currently published release
-hansohn/cloudformation:1         the 1.x.x line
-hansohn/cloudformation:1.22      the 1.22.x line
-hansohn/cloudformation:1.22.0    the exact version
+hansohn/cloudformation:2         the 2.x.x line
+hansohn/cloudformation:2.36      the 2.36.x line
+hansohn/cloudformation:2.36.31   the exact version
 ```
+
+For reproducibility, pin by digest (`hansohn/cloudformation@sha256:...`); every
+image ships provenance attestations and an SBOM bound to that digest.
 
 ## Usage
 
