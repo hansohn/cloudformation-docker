@@ -10,12 +10,11 @@ on:
     - cron: '17 7 * * 1'
   workflow_dispatch:
 
-# Never cancel an in-flight publish on the default branch; redundant feature
-# branch builds are fair game.
+# Never cancel an in-flight publish on main; redundant feature branch builds
+# are fair game.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: >-
-    ${{ github.ref_name != github.event.repository.default_branch }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
   contents: read
