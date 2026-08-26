@@ -1,27 +1,17 @@
 <div align="center">
-  <h3>cloudformation-docker</h3>
+  <h1>cloudformation-docker</h1>
   <p>CloudFormation tooling Docker image</p>
   <p>
     <!-- Build Status -->
-    <a href="https://actions-badge.atrox.dev/hansohn/cloudformation-docker/goto?ref=main">
-      <img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhansohn%2Fcloudformation-docker%2Fbadge%3Fref%3Dmain&style=for-the-badge">
-    </a>
+    <a href="https://actions-badge.atrox.dev/hansohn/cloudformation-docker/goto?ref=main"><img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fhansohn%2Fcloudformation-docker%2Fbadge%3Fref%3Dmain&style=for-the-badge"></a>
     <!-- Github Tag -->
-    <a href="https://gitHub.com/hansohn/cloudformation-docker/tags/">
-      <img src="https://img.shields.io/github/tag/hansohn/cloudformation-docker.svg?style=for-the-badge">
-    </a>
+    <a href="https://gitHub.com/hansohn/cloudformation-docker/tags/"><img src="https://img.shields.io/github/tag/hansohn/cloudformation-docker.svg?style=for-the-badge"></a>
     <!-- Docker Pulls -->
-    <a href="https://hub.docker.com/r/hansohn/cloudformation">
-      <img src="https://img.shields.io/docker/pulls/hansohn/cloudformation.svg?style=for-the-badge">
-    </a>
+    <a href="https://hub.docker.com/r/hansohn/cloudformation"><img src="https://img.shields.io/docker/pulls/hansohn/cloudformation.svg?style=for-the-badge"></a>
     <!-- Docker Image Size -->
-    <a href="https://hub.docker.com/r/hansohn/cloudformation">
-      <img src="https://img.shields.io/docker/image-size/hansohn/cloudformation/latest.svg?style=for-the-badge">
-    </a>
+    <a href="https://hub.docker.com/r/hansohn/cloudformation"><img src="https://img.shields.io/docker/image-size/hansohn/cloudformation/latest.svg?style=for-the-badge"></a>
     <!-- License -->
-    <a href="https://github.com/hansohn/cloudformation-docker/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/hansohn/cloudformation-docker.svg?style=for-the-badge">
-    </a>
+    <a href="https://github.com/hansohn/cloudformation-docker/blob/main/LICENSE"><img src="https://img.shields.io/github/license/hansohn/cloudformation-docker.svg?style=for-the-badge"></a>
   </p>
 </div>
 
