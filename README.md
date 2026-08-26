@@ -90,13 +90,13 @@ Run `make help` for all targets.
 
 Images are automatically:
 
-- **Built and linted** on every push to a non-default branch (multi-platform, without publishing)
-- **Published** on every push to `main` — `main` is what ships, and `latest` always tracks it
-- **Refreshed** every Monday at 7am UTC, rebuilding `main` to pick up the latest base-image security patches
+- **Built and linted** on every push, including `main` (multi-platform, without publishing)
+- **Published** when a version tag is pushed
+- **Refreshed** every Monday at 7am UTC, rebuilding `main` so merged dependency updates and base-image security patches reach Docker Hub
 
-Dependency-update PRs are built for verification while open, then published as
-soon as they merge. Git tags are historical markers and do not trigger a
-publish.
+Pushes to `main` are built for verification but not published. Merged
+dependency updates ship on the next weekly refresh, or immediately if you cut
+a release tag.
 
 ## Extending
 

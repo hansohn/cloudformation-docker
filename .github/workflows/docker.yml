@@ -6,17 +6,17 @@ on:
   push:
     branches:
       - '**'
-  # Weekly refresh at 07:17 UTC. This image builds straight from debian and
-  # nothing layers on it, so it shares the early slot with hansohn/terraform.
+    tags:
+      - 'v?[0-9]+.[0-9]+.[0-9]+'
   schedule:
     - cron: '17 7 * * 1'
   workflow_dispatch:
 
-# Never cancel an in-flight publish on main; redundant feature branch builds
-# are fair game.
+# Branch builds are throwaway verification, so cancel superseded ones. Tag
+# publishes are never cancelled.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: ${{ github.ref_type == 'branch' }}
 
 permissions:
   contents: read
@@ -41,14 +41,16 @@ jobs:
           dockerfile: Dockerfile
           failure-threshold: error
 
-  # Verification only. Runs for any ref that is not the default branch, so
-  # feature branches and dependency-update PRs are built but never published.
+  # Verification only, for every branch push (main included) and manual runs.
+  # Nothing here is pushed to the registry.
   build:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: [ lint ]
-    if: github.ref_name != github.event.repository.default_branch
+    if: |
+      github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'push' && github.ref_type == 'branch')
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -105,17 +107,23 @@ jobs:
           echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
-  # Continuous delivery: the default branch is what ships. Every push to it
-  # publishes, the weekly schedule republishes it to pick up base-image
-  # security patches, and a manual dispatch on it forces a rebuild. The image
-  # is built and pushed by a single buildx invocation, so a failed build
-  # publishes nothing.
+  # The only job that pushes to the registry. Two triggers:
+  #   * a version tag  -> publishes that tag's tree (an explicit release)
+  #   * the weekly cron -> publishes the default branch, so merged dependency
+  #     updates and base-image security patches reach Docker Hub without
+  #     needing a release to be cut by hand
+  # The checkout is deliberately unpinned: it resolves to the tag for a tag
+  # push and to the default branch for a scheduled run, which is what each
+  # case needs. Build and push are a single buildx invocation, so a failed
+  # build publishes nothing.
   publish:
     name: Publish
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: [ lint ]
-    if: github.ref_name == github.event.repository.default_branch
+    if: |
+      github.event_name == 'schedule'
+      || (github.event_name == 'push' && github.ref_type == 'tag')
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -162,8 +170,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ github.ref_name }}
-          cache-to: type=gha,mode=max,scope=${{ github.ref_name }}
+          cache-from: type=gha,scope=publish
+          cache-to: type=gha,mode=max,scope=publish
           provenance: true
           sbom: true
 
@@ -181,7 +189,7 @@ jobs:
           echo "### Publish Complete :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- **Version:** ${{ steps.prep.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Platforms:** ${{ env.DOCKER_PLATFORMS }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger:** ${{ github.event_name }} (${{ github.ref_name }})" >> $GITHUB_STEP_SUMMARY
           echo "- **Tags:**" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
