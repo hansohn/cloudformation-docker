@@ -12,9 +12,11 @@ on:
     - cron: '17 7 * * 1'
   workflow_dispatch:
 
+# Branch builds are throwaway verification, so cancel superseded ones. Tag
+# publishes are never cancelled.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref_type == 'branch' }}
 
 permissions:
   contents: read
@@ -39,14 +41,16 @@ jobs:
           dockerfile: Dockerfile
           failure-threshold: error
 
+  # Verification only, for every branch push (main included) and manual runs.
+  # Nothing here is pushed to the registry.
   build:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: [ lint ]
     if: |
-      github.event_name != 'schedule'
-      && !(github.event_name == 'push' && github.ref_type == 'tag')
+      github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'push' && github.ref_type == 'branch')
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -97,19 +101,29 @@ jobs:
           echo "### Build Complete :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- **Version:** ${{ steps.prep.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Platforms:** ${{ env.DOCKER_PLATFORMS }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Published:** no (verification build)" >> $GITHUB_STEP_SUMMARY
           echo "- **Tags:**" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
-  deploy:
-    name: Deploy
+  # The only job that pushes to the registry. Two triggers:
+  #   * a version tag  -> publishes that tag's tree (an explicit release)
+  #   * the weekly cron -> publishes the default branch, so merged dependency
+  #     updates and base-image security patches reach Docker Hub without
+  #     needing a release to be cut by hand
+  # The checkout is deliberately unpinned: it resolves to the tag for a tag
+  # push and to the default branch for a scheduled run, which is what each
+  # case needs. Build and push are a single buildx invocation, so a failed
+  # build publishes nothing.
+  publish:
+    name: Publish
     runs-on: ubuntu-latest
     timeout-minutes: 60
     needs: [ lint ]
     if: |
-      github.event_name == 'push'
-      && github.ref_type == 'tag'
+      github.event_name == 'schedule'
+      || (github.event_name == 'push' && github.ref_type == 'tag')
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -148,7 +162,7 @@ jobs:
             type=raw,value=${{ steps.prep.outputs.major }}
             type=raw,value=latest
 
-      - name: Build
+      - name: Build and push
         uses: docker/build-push-action@v7
         with:
           context: ${{ env.BUILD_CONTEXT }}
@@ -156,8 +170,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=${{ github.ref_name }}
-          cache-to: type=gha,mode=max,scope=${{ github.ref_name }}
+          cache-from: type=gha,scope=publish
+          cache-to: type=gha,mode=max,scope=publish
           provenance: true
           sbom: true
 
@@ -170,100 +184,12 @@ jobs:
           exit-code: '0'
           ignore-unfixed: true
 
-      - name: Deploy Summary
+      - name: Publish Summary
         run: |
-          echo "### Deploy Complete :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "### Publish Complete :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- **Version:** ${{ steps.prep.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Platforms:** ${{ env.DOCKER_PLATFORMS }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Tags:**" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-
-  refresh:
-    name: Refresh
-    runs-on: ubuntu-latest
-    timeout-minutes: 60
-    needs: [ lint ]
-    if: github.event_name == 'schedule'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
-      - name: Get previous tag
-        id: previous_tag
-        uses: WyriHaximus/github-action-get-previous-tag@v2
-        with:
-          fallback: main
-
-      - name: Checkout previous tag
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ steps.previous_tag.outputs.tag }}
-
-      - name: Prepare metadata
-        id: prep
-        run: |
-          version=$(grep -E '^ARG AWSCLI_VERSION=' Dockerfile | head -1 | cut -d= -f2)
-          {
-            echo "version=${version}"
-            echo "minor=${version%.*}"
-            echo "major=${version%%.*}"
-            echo "repo=${GITHUB_REPOSITORY%-docker}"
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: ${{ steps.prep.outputs.repo }}
-          tags: |
-            type=raw,value=${{ steps.prep.outputs.version }}
-            type=raw,value=${{ steps.prep.outputs.minor }}
-            type=raw,value=${{ steps.prep.outputs.major }}
-            type=raw,value=latest
-
-      - name: Rebuild and push
-        uses: docker/build-push-action@v7
-        with:
-          context: ${{ env.BUILD_CONTEXT }}
-          platforms: ${{ env.DOCKER_PLATFORMS }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=refresh
-          cache-to: type=gha,mode=max,scope=refresh
-          provenance: true
-          sbom: true
-
-      - name: Run Trivy vulnerability scan
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          image-ref: ${{ steps.prep.outputs.repo }}:${{ steps.prep.outputs.version }}
-          format: table
-          severity: CRITICAL,HIGH
-          exit-code: '0'
-          ignore-unfixed: true
-
-      - name: Refresh Summary
-        run: |
-          echo "### Refresh Complete :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version:** ${{ steps.prep.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Platforms:** ${{ env.DOCKER_PLATFORMS }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger:** ${{ github.event_name }} (${{ github.ref_name }})" >> $GITHUB_STEP_SUMMARY
           echo "- **Tags:**" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
@@ -273,11 +199,8 @@ jobs:
     name: Dockerhub
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [ deploy, refresh ]
-    if: |
-      always()
-      && !contains(needs.*.result, 'failure')
-      && (contains(needs.deploy.result, 'success') || contains(needs.refresh.result, 'success'))
+    needs: [ publish ]
+    if: needs.publish.result == 'success'
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -297,7 +220,7 @@ jobs:
     name: Slack
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [ build, dockerhub ]
+    needs: [ build, publish, dockerhub ]
     if: always()
     steps:
       - name: Checkout

@@ -85,6 +85,18 @@ DOCKER_PLATFORMS=linux/amd64,linux/arm64 make docker/build
 
 Run `make help` for all targets.
 
+## Publishing
+
+Images are automatically:
+
+- **Built and linted** on every push, including `main` (multi-platform, without publishing)
+- **Published** when a version tag is pushed
+- **Refreshed** every Monday at 7am UTC, rebuilding `main` so merged dependency updates and base-image security patches reach Docker Hub
+
+Pushes to `main` are built for verification but not published. Merged
+dependency updates ship on the next weekly refresh, or immediately if you cut
+a release tag.
+
 ## Extending
 
 Additional CloudFormation tooling can be layered in the `Dockerfile` following
