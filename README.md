@@ -99,12 +99,12 @@ Terraform images all layer on top of `hansohn/terraform`.
 
 | Repo | Image | Contents |
 | ---- | ----- | -------- |
-| [terraform-docker](https://github.com/hansohn/terraform-docker) | [`hansohn/terraform`](https://hub.docker.com/r/hansohn/terraform) | Base Terraform toolchain — terraform, terragrunt, tflint, terraform-docs, trivy |
-| [terraform-aws-docker](https://github.com/hansohn/terraform-aws-docker) | [`hansohn/terraform-aws`](https://hub.docker.com/r/hansohn/terraform-aws) | Base image plus the AWS CLI and the TFLint AWS ruleset |
-| [terraform-azure-docker](https://github.com/hansohn/terraform-azure-docker) | [`hansohn/terraform-azure`](https://hub.docker.com/r/hansohn/terraform-azure) | Base image plus the Azure CLI and the TFLint AzureRM ruleset |
-| [terraform-digitalocean-docker](https://github.com/hansohn/terraform-digitalocean-docker) | [`hansohn/terraform-digitalocean`](https://hub.docker.com/r/hansohn/terraform-digitalocean) | Base image plus doctl, the DigitalOcean CLI |
-| [terraform-google-docker](https://github.com/hansohn/terraform-google-docker) | [`hansohn/terraform-google`](https://hub.docker.com/r/hansohn/terraform-google) | Base image plus the Google Cloud CLI and the TFLint Google ruleset |
-| **cloudformation-docker** (this repo) | [`hansohn/cloudformation`](https://hub.docker.com/r/hansohn/cloudformation) | CloudFormation tooling — aws-cli, cfn-lint, rain, cfn-guard |
+| [terraform-docker](https://github.com/hansohn/terraform-docker) | [`hansohn/terraform`](https://hub.docker.com/r/hansohn/terraform) | terraform, terragrunt, terraform-docs, tflint, trivy |
+| [terraform-aws-docker](https://github.com/hansohn/terraform-aws-docker) | [`hansohn/terraform-aws`](https://hub.docker.com/r/hansohn/terraform-aws) | terraform base + aws-cli, tflint-ruleset-aws |
+| [terraform-azure-docker](https://github.com/hansohn/terraform-azure-docker) | [`hansohn/terraform-azure`](https://hub.docker.com/r/hansohn/terraform-azure) | terraform base + azure-cli, tflint-ruleset-azurerm |
+| [terraform-digitalocean-docker](https://github.com/hansohn/terraform-digitalocean-docker) | [`hansohn/terraform-digitalocean`](https://hub.docker.com/r/hansohn/terraform-digitalocean) | terraform base + doctl |
+| [terraform-google-docker](https://github.com/hansohn/terraform-google-docker) | [`hansohn/terraform-google`](https://hub.docker.com/r/hansohn/terraform-google) | terraform base + gcloud-cli, tflint-ruleset-google |
+| [cloudformation-docker](https://github.com/hansohn/cloudformation-docker) | [`hansohn/cloudformation`](https://hub.docker.com/r/hansohn/cloudformation) | aws-cli, cfn-lint, rain, cfn-guard |
 
 ## License
 
